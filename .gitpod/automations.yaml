@@ -4,34 +4,42 @@ tasks:
         command: |
             echo "Hello, World!"
         triggeredBy:
-        - manual
+            - manual
         # - postEnvironmentStart
         # - postDevcontainerStart
+    cursor:
+        name: Setup Cursor.io
+        command: |
+            echo "Setting up Cursor.io..."
+            npm install @cursor.io/analytics
+            CURSOR_APP_ID=your_app_id npm run cursor-start
+        triggeredBy:
+            - manual
+            - postEnvironmentStart
 
 services:
-    backend:
-        name: Backend Service
-        description: Example service simulating a backend
+    cursor:
+        name: Cursor.io
+        description: Cursor.io session replay service
         commands:
             start: |
-                echo "Starting backend service..."
-                touch /tmp/backend.started
-                while true; do
-                    sleep 1
-                    date
-                done
+                echo "Starting Cursor.io service..."
+                # Replace with actual cursor.io startup command
+                CURSOR_APP_ID=your_app_id \
+                npm install @cursor.io/analytics
+                npm run cursor-start
             ready: |
-                if [ -f /tmp/backend.started ]; then
-                    echo "Backend service is ready"
+                # Add appropriate health check for cursor.io
+                if curl -s http://localhost:YOUR_CURSOR_PORT > /dev/null; then
+                    echo "Cursor.io service is ready"
                     exit 0
                 else
-                    echo "Backend service is not ready"
+                    echo "Cursor.io service is not ready"
                     exit 1
                 fi
-            # stop: |
-            # 	echo "Stopping backend service..."
-            # 	rm /tmp/backend.started
-            #   pkill backend
+            stop: |
+                echo "Stopping Cursor.io service..."
+                # Replace with actual cursor.io stop command
+                npm run cursor-stop
         triggeredBy:
             - postEnvironmentStart
-            # - postDevcontainerStart
