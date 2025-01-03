@@ -1,12 +1,4 @@
 tasks:
-    hello:
-        name: Hello World
-        command: |
-            echo "Hello, World!"
-        triggeredBy:
-            - manual
-        # - postEnvironmentStart
-        # - postDevcontainerStart
     cursor:
         name: Setup Cursor.io
         command: |
@@ -14,7 +6,6 @@ tasks:
             npm install @cursor.io/analytics
             CURSOR_APP_ID=your_app_id npm run cursor-start
         triggeredBy:
-            - manual
             - postEnvironmentStart
 
 services:
