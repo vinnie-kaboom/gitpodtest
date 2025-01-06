@@ -3,11 +3,29 @@ tasks:
         name: Setup GoLand
         command: |
             echo "Setting up GoLand..."
-            # Install any necessary Go tools
+            # Install JetBrains Gateway dependencies
+            sudo apt-get update && sudo apt-get install -y \
+                libxtst6 \
+                libxrender1 \
+                libfontconfig1 \
+                libxi6 \
+                libgtk-3-0
+
+            # Install Go tools
             go install golang.org/x/tools/gopls@latest
             go install github.com/go-delve/delve/cmd/dlv@latest
+            go install github.com/fatih/gomodifytags@latest
+            go install github.com/cweill/gotests/gotests@latest
+            go install github.com/haya14busa/goplay/cmd/goplay@latest
+            go install github.com/josharian/impl@latest
+            
+            # Print instructions for connecting via Gateway
+            echo "To use GoLand:"
+            echo "1. Download JetBrains Gateway from https://www.jetbrains.com/remote-development/gateway/"
+            echo "2. In Gateway, select 'Connect to Gitpod'"
+            echo "3. Use your Gitpod workspace URL"
+            echo "4. Sign in with your JetBrains account to activate your license"
         triggeredBy:
-            - manual
             - postEnvironmentStart
 
 services:
