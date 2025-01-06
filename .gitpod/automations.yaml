@@ -1,36 +1,39 @@
 tasks:
-    cursor:
-        name: Setup Cursor.io
+    goland:
+        name: Setup GoLand
         command: |
-            echo "Setting up Cursor.io..."
-            npm install @cursor.io/analytics
-            CURSOR_APP_ID=your_app_id npm run cursor-start
+            echo "Setting up GoLand..."
+            # Install any necessary Go tools
+            go install golang.org/x/tools/gopls@latest
+            go install github.com/go-delve/delve/cmd/dlv@latest
         triggeredBy:
+            - manual
             - postEnvironmentStart
 
 services:
-    cursor:
-        name: Cursor.io
-        description: Cursor.io session replay service
+    goland:
+        name: GoLand
+        description: GoLand IDE service
         commands:
             start: |
-                echo "Starting Cursor.io service..."
-                # Replace with actual cursor.io startup command
-                CURSOR_APP_ID=your_app_id \
-                npm install @cursor.io/analytics
-                npm run cursor-start
+                echo "Starting GoLand service..."
+                # Replace with your GoLand startup command
+                # Typically GoLand is started through the IDE itself
+                # This is more for setting up necessary tooling
+                go mod download
+                go mod tidy
             ready: |
-                # Add appropriate health check for cursor.io
-                if curl -s http://localhost:YOUR_CURSOR_PORT > /dev/null; then
-                    echo "Cursor.io service is ready"
+                # Basic health check for Go development environment
+                if command -v gopls >/dev/null 2>&1 && command -v dlv >/dev/null 2>&1; then
+                    echo "GoLand environment is ready"
                     exit 0
                 else
-                    echo "Cursor.io service is not ready"
+                    echo "GoLand environment is not ready"
                     exit 1
                 fi
             stop: |
-                echo "Stopping Cursor.io service..."
-                # Replace with actual cursor.io stop command
-                npm run cursor-stop
+                echo "Stopping GoLand service..."
+                # Usually not needed as GoLand is managed by the IDE
+                # But you can add cleanup commands here if needed
         triggeredBy:
             - postEnvironmentStart
